@@ -1,23 +1,88 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useCallback, useEffect, useState } from 'react';
+import abi from "./abi.json";
+import { ethers } from "ethers";
+
+const contractAddress = "0x9D1eb059977D71E1A21BdebD1F700d4A39744A70";
 
 function App() {
+  const [text, setText] = useState("");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState(null);
+
+  async function requestAccount() {
+    await window.ethereum.request({ method: 'eth_requestAccounts' });
+  }
+
+  const handleSet = async () => {
+    try {
+      if (!text) {
+        alert("Please enter a message before setting.");
+        return;
+      }
+
+      if (window.ethereum) {
+        await requestAccount();
+
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, abi, signer);
+
+        const tx = await contract.setMessage(text); 
+        const txReceipt = await tx.wait();
+        console.log("Transaction successful:", txReceipt);
+
+        await get();
+      } else {
+        console.error("MetaMask not found. Please install MetaMask to use this application.");
+        setError("MetaMask not found. Please install MetaMask to use this application.");
+      }
+    } catch (error) {
+      console.error("Error setting message:", error);
+      alert(error.message || error);
+      setError(error.message || "Oops, Failed to set message.");
+    }
+  };
+
+  const get = useCallback(async () => {
+    try {
+      if (!window.ethereum) {
+        setError("MetaMask not found. Please install MetaMask to use this application.");
+        return;
+      }
+      if (!window.ethereum.isMetaMask) {
+        setError("Please use MetaMask wallet only.");
+        return;
+      }
+      await requestAccount();
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const contract = new ethers.Contract(contractAddress, abi, provider);
+      const messageFromContract = await contract.message();
+      setMessage(messageFromContract);
+      setError(null);
+    } catch (error) {
+      console.error("Error fetching message:", error);
+      setError("Failed to fetch message: " + (error.message || "Check console for details"));
+    }
+  }, []);
+
+  useEffect(() => {
+    get();
+  }, [get]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ padding: "2rem" }}>
+      <h1>Set Message on Smart Contract</h1>
+      <input
+        type="text"
+        placeholder="Set message"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
+      <button onClick={handleSet}>Set Message</button>
+      <div>
+        {message && <p>Current Message: {message}</p>}
+        {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+      </div>
     </div>
   );
 }
