@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import abi from "./abi.json";
+import "../src/myCss.css";
 import { ethers } from "ethers";
 
 const contractAddress = "0xee053B950ea5b88Db90288D1E92f7a293dDe3628"; //this is the contract address after i have deployed the contract
@@ -37,12 +38,12 @@ function App() {
         const txReceipt = await tx.wait();
         console.log("Transaction successful:", txReceipt);
         setMessage(txReceipt);
-        console.log(tx, txReceipt)
+        console.log(tx, txReceipt);
         setGetInError(null);
         setText("");
 
         await handleGet();
-        setViewIn("Messge Set!...")
+        setViewIn("Messge Set!...");
       } else {
         setViewIn("Error Sending...");
         console.error(
@@ -71,7 +72,7 @@ function App() {
         setGetOutError("Please use MetaMask wallet only.");
         return;
       }
-      setViewOut("fetching Message...")
+      setViewOut("fetching Message...");
       await requestAccount();
       const provider = new ethers.BrowserProvider(window.ethereum);
       const contract = new ethers.Contract(contractAddress, abi, provider);
@@ -81,6 +82,7 @@ function App() {
       setViewOut("Message Fetched Below!")
     } catch (error) {
       console.error("Error fetching message:", error);
+      setViewOut("Error fetching message");
       setGetOutError(
         "Failed to fetch message: " +
           (error.message || "Check console for details")
@@ -93,9 +95,9 @@ function App() {
   }, [handleGet]);
 
   return (
-    <div style={{ padding: "2rem", display: "flex", justifyContent: "center", alignItems: "center", }}>
-      <div style={{ position: "absolute", top: "25%", border: "2px solid blue", width: "50%", padding: "3% 3%", textAlign: "center", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-        <h1>Set Message on Smart Contract</h1>
+    <div className="firstdiv" style={{ padding: "2rem", display: "flex", justifyContent: "center", alignItems: "center", }}>
+      <div className="seconddiv" style={{ position: "absolute", top: "25%", border: "2px solid blue", width: "70%", padding: "3% 3%", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        <h1 style={{ textAlign: "center", fontSize: "25px" }}>Smart Contract</h1>
         <input
           type="text"
           placeholder="Set message"
@@ -103,15 +105,15 @@ function App() {
           style={{ margin: "1.5rem 1.5rem", width: "70%"}}
           onChange={(e) => setText(e.target.value)}
         />
-        <button style={{ margin: "1rem 1xrem", padding: "2% 2%", width: "70%" }}  onClick={handleSet}>{viewIn}</button>
-        <div>
-          {message && <p>Wallet Address: {message}</p>}
+        <button style={{ margin: "1rem 1rem", padding: "3% 3%", width: "70%", border: "none", backgroundColor: "blue", color: "white", borderRadius: "5%" }}  onClick={handleSet}>{viewIn}</button>
+        <div style={{ overflow: "hidden"}}>
+          {message && <p style={{ overflow: "hidden"}}>Message: {message}</p>}
           {getInError && <p style={{ color: "red" }}>Error: {getInError}</p>}
         </div>
 
-        <button onClick={handleGet}>{viewOut}</button>
+        <button style={{ margin: "1rem 1rem", padding: "3% 3%", width: "70%", border: "none", backgroundColor: "blue", color: "white", borderRadius: "5%" }} onClick={handleGet}>{viewOut}</button>
         <div>
-          {outMessage && <p>Get Message: {outMessage}</p>}
+          {outMessage && <p style={{ overflow: "hidden"}}>Message: {outMessage}</p>}
           {getOutError && <p style={{ color: "red" }}>Error: {getOutError}</p>}
         </div>
         </div>
