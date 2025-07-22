@@ -1,0 +1,71 @@
+.firstdiv {
+    padding: 2rem 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.firsthi {
+    text-align: center;
+}
+.seconddiv {
+    position: absolute;
+    top: 15%;
+    border: 2px solid blue;
+    width: 40%;
+    padding: 3% 3%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 3%;
+    box-shadow: 0 15px 45px -20px rgba(0, 0, 255, 0.719);
+}
+.uniInput {
+    margin: 1.5rem 1.5rem;
+    padding: 2% 2%;
+}
+.firstbtn {
+    margin: 1rem 1rem; 
+    padding: 3% 3%; 
+    border: none;
+    background-color: blue;
+    color: white; 
+    border-radius: 5%; 
+}
+.secbtn {
+    margin: 1rem 1rem; 
+    padding: 3% 3%; 
+    border: none;
+    background-color: blue;
+    color: white; 
+    border-radius: 5%; 
+}
+.good {
+    overflow: hidden;
+    margin: 1rem 1rem; 
+    color: green;
+    font-style: italic;
+}
+.errors {
+    overflow: hidden;
+    margin: 1rem 1rem; 
+}
+
+@media only screen and (max-width: 900px) {
+    .firstdiv {
+        padding: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 3%;
+    }
+  .seconddiv {
+        border: 2px solid blue;
+        font-size: 20px;
+        width: 80%;
+    }
+    .errors {
+        overflow-x: hidden;
+        overflow-y: scroll;
+        margin: 1rem 1rem;
+    }
+}
