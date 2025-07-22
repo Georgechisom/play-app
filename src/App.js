@@ -82,8 +82,8 @@ function App() {
       setViewOut("Message Fetched Below!")
     } catch (error) {
       console.error("Error fetching message:", error);
-      setViewOut("Reponds Below");
-      setGetOutError(
+      setViewOut("Reponds Above");
+      setGetInError(
         "Failed to fetch message: " +
           (error.message || "Check console for details")
       );
