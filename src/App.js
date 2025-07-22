@@ -114,7 +114,7 @@ function App() {
         <button className="secbtn" onClick={handleGet}>{viewOut}</button>
         <div style={{ overflow: "hidden"}}>
           {outMessage && <p className="good">Message: {outMessage}</p>}
-          {getOutError && <p className="erroes">Error: {getOutError}</p>}
+          {getOutError && <p className="erroes">Error: {getInError}</p>}
         </div>
         </div>
     </div>
